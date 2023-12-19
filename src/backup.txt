@@ -1,0 +1,433 @@
+// // src/LectorFarmacia.js
+// import React, { useState, useEffect } from 'react';
+// import * as XLSX from 'xlsx';
+
+
+// const LectorFarmacia = () => {
+//   const [numero, setNumero] = useState('');
+//   const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
+
+//   const handleInputChange = (event) => {
+//     setNumero(event.target.value);
+//   };
+
+//   const handleEnviar = () => {
+//     alert(`Número enviado: ${numero}`);
+//   };
+
+//   const handleArchivoSeleccionado = (event) => {
+//     const archivo = event.target.files[0];
+//     setArchivoSeleccionado(archivo);
+//   };
+
+//   useEffect(() => {
+//     if (archivoSeleccionado) {
+//       // Aquí puedes leer y procesar el archivo xlsx seleccionado
+//       leerArchivoXLSX(archivoSeleccionado);
+//     }
+//   }, [archivoSeleccionado]); // Se ejecutará cuando 'archivoSeleccionado' cambie
+
+//   const leerArchivoXLSX = (archivo) => {
+//     const lector = new FileReader();
+//     lector.onload = (e) => {
+//       const data = new Uint8Array(e.target.result);
+//       const workbook = XLSX.read(data, { type: 'array' });
+//       const sheet = workbook.Sheets[workbook.SheetNames[0]];
+//       // Procesar los datos del archivo xlsx según tus necesidades
+//       // ...
+//     };
+//     lector.readAsArrayBuffer(archivo);
+//   };
+
+//   return (
+//     <div>
+//       <h1 className="titulo">Lector de Farmacia</h1>
+//       <label>
+//         Introduce un número:
+//         <input type="text" value={numero} onChange={handleInputChange} />
+//       </label>
+//       <label>
+//         Selecciona un archivo xlsx:
+//         <input type="file" accept=".xlsx, .xls" onChange={handleArchivoSeleccionado} />
+//       </label>
+//       <button onClick={handleEnviar}>Enviar</button>
+//       <p>El número introducido es: {numero}</p>
+//     </div>
+//   );
+// };
+
+// export default LectorFarmacia;
+// src/LectorFarmacia.js
+
+//###SEGUNDA OPCIÓN####
+// src/LectorFarmacia.js
+// import React, { useState, useEffect } from 'react';
+// import * as XLSX from 'xlsx';
+
+
+// const LectorFarmacia = () => {
+//   const [numero, setNumero] = useState('');
+//   const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
+//   const [datosXlsx, setDatosXlsx] = useState(null);
+//   const [filaResaltada, setFilaResaltada] = useState(null);
+
+//   const handleInputChange = (event) => {
+//     setNumero(event.target.value);
+//   };
+
+//   const handleEnviar = () => {
+//     const filaCoincidente = datosXlsx.findIndex((fila) => fila.includes(numero));
+//     setFilaResaltada(filaCoincidente);
+//     alert(`Número enviado: ${numero}`);
+//   };
+
+//   const handleArchivoSeleccionado = (event) => {
+//     const archivo = event.target.files[0];
+//     setArchivoSeleccionado(archivo);
+//   };
+
+//   const handleInputKeyDown = (event) => {
+//     if (event.key === 'Enter') {
+//       handleEnviar();
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (archivoSeleccionado) {
+//       leerArchivoXLSX(archivoSeleccionado);
+//     }
+//   }, [archivoSeleccionado]);
+
+//   const leerArchivoXLSX = (archivo) => {
+//     const lector = new FileReader();
+//     lector.onload = (e) => {
+//       const data = new Uint8Array(e.target.result);
+//       const workbook = XLSX.read(data, { type: 'array' });
+//       const sheet = workbook.Sheets[workbook.SheetNames[0]];
+//       const range = XLSX.utils.decode_range(sheet['!ref']);
+//       const numFilas = range.e.r;
+//       const numColumnas = range.e.c;
+
+//       const datos = [];
+//       for (let i = 0; i <= numFilas; i++) {
+//         const fila = [];
+//         for (let j = 0; j <= numColumnas; j++) {
+//           const celda = XLSX.utils.encode_cell({ r: i, c: j });
+//           fila.push(sheet[celda] ? sheet[celda].v : '');
+//         }
+//         datos.push(fila);
+//       }
+
+//       setDatosXlsx(datos);
+//     };
+//     lector.readAsArrayBuffer(archivo);
+//   };
+
+//   return (
+//     <div>
+//       <h1 className="titulo">Lector de Farmacia</h1>
+//       <label>
+//         Introduce un número:
+//         <input
+//           type="text"
+//           value={numero}
+//           onChange={handleInputChange}
+//           onKeyDown={handleInputKeyDown}
+//         />
+//       </label>
+//       <label>
+//         Selecciona un archivo xlsx:
+//         <input type="file" accept=".xlsx, .xls" onChange={handleArchivoSeleccionado} />
+//       </label>
+//       <button onClick={handleEnviar}>Enviar</button>
+
+//       {datosXlsx && (
+//         <div>
+//           <h2>Contenido del archivo xlsx:</h2>
+//           <table className="datos-tabla">
+//             <thead>
+//               <tr>
+//                 {datosXlsx[0].map((valor, index) => (
+//                   <th key={index}>{valor}</th>
+//                 ))}
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {datosXlsx.slice(1).map((fila, index) => (
+//                 <tr
+//                   key={index}
+//                   style={{ backgroundColor: filaResaltada === index ? 'green' : 'white' }}
+//                 >
+//                   {fila.map((valor, index) => (
+//                     <td key={index}>{valor}</td>
+//                   ))}
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default LectorFarmacia;
+//PRUEBA 3
+
+import React, { useState, useEffect } from 'react';
+import * as XLSX from 'xlsx';
+import './estilos.css'; // Asegúrate de importar tu archivo de estilos
+
+const LectorFarmacia = () => {
+  const [numero, setNumero] = useState('');
+  const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
+  const [datosXlsx, setDatosXlsx] = useState(null);
+
+  const handleInputChange = (event) => {
+    setNumero(event.target.value);
+  };
+
+  const handleEnviar = () => {
+    alert(`Número enviado: ${numero}`);
+    resaltarCelda(numero);
+  };
+
+  const handleArchivoSeleccionado = (event) => {
+    const archivo = event.target.files[0];
+    setArchivoSeleccionado(archivo);
+  };
+
+  const handleInputKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleEnviar();
+    }
+  };
+
+  useEffect(() => {
+    if (archivoSeleccionado) {
+      leerArchivoXLSX(archivoSeleccionado);
+    }
+  }, [archivoSeleccionado]);
+
+  const leerArchivoXLSX = (archivo) => {
+    const lector = new FileReader();
+    lector.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const range = XLSX.utils.decode_range(sheet['!ref']);
+      const numFilas = range.e.r;
+      const numColumnas = range.e.c;
+
+      const datos = [];
+      for (let i = 0; i <= numFilas; i++) {
+        const fila = [];
+        for (let j = 0; j <= numColumnas; j++) {
+          const celda = XLSX.utils.encode_cell({ r: i, c: j });
+          fila.push(sheet[celda] ? sheet[celda].v : '');
+        }
+        datos.push(fila);
+      }
+
+      setDatosXlsx(datos);
+    };
+    lector.readAsArrayBuffer(archivo);
+  };
+
+  const resaltarCelda = (valor) => {
+    if (datosXlsx) {
+      for (let i = 0; i < datosXlsx.length; i++) {
+        const fila = datosXlsx[i];
+        const columna = fila.indexOf(valor);
+        if (columna !== -1) {
+          alert(`Número ${valor} encontrado en la fila ${i + 1}, columna ${columna + 1}`);
+          return; // Detener la búsqueda después de encontrar la primera coincidencia
+        }
+      }
+      alert(`Número ${valor} no encontrado en la tabla`);
+    }
+  };
+
+  return (
+    <div>
+      <h1 className="titulo">Lector de Farmacia</h1>
+      <label>
+        Introduce un número:
+        <input
+          type="text"
+          value={numero}
+          onChange={handleInputChange}
+          onKeyDown={handleInputKeyDown}
+        />
+      </label>
+      <label>
+        Selecciona un archivo xlsx:
+        <input type="file" accept=".xlsx, .xls" onChange={handleArchivoSeleccionado} />
+      </label>
+      <button onClick={handleEnviar}>Enviar</button>
+
+      {datosXlsx && (
+        <div>
+          <h2>Contenido del archivo xlsx:</h2>
+          <table className="datos-tabla">
+            <thead>
+              <tr>
+                {datosXlsx[0].map((valor, index) => (
+                  <th key={index}>{valor}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {datosXlsx.slice(1).map((fila, rowIndex) => (
+                <tr key={rowIndex}>
+                  {fila.map((valor, colIndex) => (
+                    <td
+                      key={colIndex}
+                      className={valor === numero ? 'celda-resaltada' : ''}
+                    >
+                      {valor}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default LectorFarmacia;
+
+//CUARTO
+
+
+import React, { useState, useEffect } from 'react';
+import * as XLSX from 'xlsx';
+import './estilos.css'; 
+
+const LectorFarmacia = () => {
+  const [numero, setNumero] = useState('');
+  const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
+  const [datosXlsx, setDatosXlsx] = useState(null);
+  const [celdaResaltada, setCeldaResaltada] = useState({ fila: -1, columna: -1 });
+  const handleInputChange = (event) => {
+    setNumero(event.target.value);
+  };
+
+  const handleEnviar = () => {
+    alert(`Número enviado: ${numero}`);
+    resaltarCelda(numero);
+  };
+
+  const handleArchivoSeleccionado = (event) => {
+    const archivo = event.target.files[0];
+    setArchivoSeleccionado(archivo);
+  };
+
+  const handleInputKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleEnviar();
+    }
+  };
+
+  useEffect(() => {
+    if (archivoSeleccionado) {
+      leerArchivoXLSX(archivoSeleccionado);
+    }
+  }, [archivoSeleccionado]);
+
+  const leerArchivoXLSX = (archivo) => {
+    const lector = new FileReader();
+    lector.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const range = XLSX.utils.decode_range(sheet['!ref']);
+      const numFilas = range.e.r;
+      const numColumnas = range.e.c;
+
+      const datos = [];
+      for (let i = 0; i <= numFilas; i++) {
+        const fila = [];
+        for (let j = 0; j <= numColumnas; j++) {
+          const celda = XLSX.utils.encode_cell({ r: i, c: j });
+          fila.push(sheet[celda] ? sheet[celda].v : '');
+        }
+        datos.push(fila);
+      }
+
+      setDatosXlsx(datos);
+    };
+    lector.readAsArrayBuffer(archivo);
+  };
+
+  const resaltarCelda = (valor) => {
+    if (datosXlsx) {
+      for (let i = 0; i < datosXlsx.length; i++) {
+        const fila = datosXlsx[i];
+        const columna = fila.indexOf(valor);
+        if (columna !== -1) {
+          alert(`Número ${valor} encontrado en la fila ${i + 1}, columna ${columna + 1}`);
+          // Almacena la información de la celda resaltada en el estado
+          setCeldaResaltada({ fila: i, columna: columna });    
+          return;
+        }
+      }
+      alert(`Número ${valor} no encontrado en la tabla`);
+    }
+  };
+
+  return (
+    <div>
+      <h1 className="titulo">Lector de Farmacia</h1>
+      <label>
+        Introduce un número:
+        <input
+          type="text"
+          value={numero}
+          onChange={handleInputChange}
+          onKeyDown={handleInputKeyDown}
+        />
+      </label>
+      <label>
+        Selecciona un archivo xlsx:
+        <input type="file" accept=".xlsx, .xls" onChange={handleArchivoSeleccionado} />
+      </label>
+      <button onClick={handleEnviar}>Enviar</button>
+
+      {datosXlsx && (
+        <div>
+          <h2>Contenido del archivo xlsx:</h2>
+          <table className="datos-tabla">
+            <thead>
+              <tr>
+                {datosXlsx[0].map((valor, index) => (
+                  <th key={index}>{valor}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+            {datosXlsx.slice(0).map((fila, rowIndex) => (
+    <tr key={rowIndex}>
+      {fila.map((valor, colIndex) => (
+        <td
+          key={colIndex}
+          className={rowIndex === celdaResaltada.fila && colIndex === celdaResaltada.columna ? 'celda-resaltada' : ''}
+        >
+          {valor}
+        </td>
+      ))}
+    </tr>
+  ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default LectorFarmacia;
+
