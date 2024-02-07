@@ -4,9 +4,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as XLSX from 'xlsx';
 import './estilos.css';
-//import Mensaje from './mensaje'
 
-const LectorFarmacia = () => {
+
+const LectorFarmacia = () => {  
   const [numero, setNumero] = useState('');
   const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
   const [datosXlsx, setDatosXlsx] = useState(null);
@@ -188,3 +188,4 @@ const LectorFarmacia = () => {
 };
 
 export default LectorFarmacia;
+ 
