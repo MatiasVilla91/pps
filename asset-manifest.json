@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/pps/build/static/css/main.bb2bb6f3.css",
+    "main.js": "/pps/build/static/js/main.5120ed8b.js",
+    "static/js/787.a09a58e6.chunk.js": "/pps/build/static/js/787.a09a58e6.chunk.js",
+    "index.html": "/pps/build/index.html",
+    "main.bb2bb6f3.css.map": "/pps/build/static/css/main.bb2bb6f3.css.map",
+    "main.5120ed8b.js.map": "/pps/build/static/js/main.5120ed8b.js.map",
+    "787.a09a58e6.chunk.js.map": "/pps/build/static/js/787.a09a58e6.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bb2bb6f3.css",
+    "static/js/main.5120ed8b.js"
+  ]
+}
